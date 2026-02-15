@@ -84,6 +84,10 @@ if "current_q" not in st.session_state:
 
 st.title("外務員ニ種クイズアプリ")
 
+# 3行分のスペースを空ける
+st.markdown("<br><br><br>", unsafe_allow_html=True)
+
+
 q = st.session_state.current_q 
 st.markdown(f"<div class='question-text'>{q['question']}</div>", unsafe_allow_html=True) 
 user_answer = st.radio("", q["options"], key=q["question"])
