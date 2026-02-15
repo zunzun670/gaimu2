@@ -85,7 +85,7 @@ if "current_q" not in st.session_state:
 st.title("外務員ニ種クイズアプリ")
 
 # 3行分のスペースを空ける
-st.markdown("<br><br><br>", unsafe_allow_html=True)
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 
 q = st.session_state.current_q 
