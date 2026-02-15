@@ -75,18 +75,18 @@ questions = [
     },
 ]
 
-# セッション状態の初期化
-if "current_q" not in st.session_state:
-    st.session_state.current_q = random.choice(questions)
-    st.session_state.answered = False
-    st.session_state.feedback = ""
+# セッション状態の初期化 
+if "current_q" not in st.session_state: 
+    st.session_state.current_q = random.choice(questions) 
+    st.session_state.answered = False 
+    st.session_state.feedback = "" 
     st.session_state.explanation = ""
 
 st.title("外務員ニ種クイズアプリ")
 
-q = st.session_state.current_q
-st.subheader(q["question"])
-user_answer = st.radio("選択肢を選んでね", q["options"], key=q["question"])
+q = st.session_state.current_q 
+st.markdown(f"<div class='question-text'>{q['question']}</div>", unsafe_allow_html=True) 
+user_answer = st.radio("", q["options"], key=q["question"])
 
 if not st.session_state.answered:
     if st.button("答え合わせ"):
