@@ -1,6 +1,16 @@
 import streamlit as st
 import random
 
+# CSSでフォントサイズと太さを統一 
+st.markdown(""" 
+    <style> 
+    .question-text, .stRadio label { 
+    font-size: 18px !important; 
+    font-weight: 500 !important; 
+}
+    </style> 
+""", unsafe_allow_html=True)
+
 # 問題データ
 questions = [
     {
