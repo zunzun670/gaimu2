@@ -101,9 +101,16 @@ if not st.session_state.answered:
 if st.session_state.answered:
     st.markdown(st.session_state.feedback)
     st.info(st.session_state.explanation)
+
     if st.button("次へ"):
-        st.session_state.current_q = random.choice(questions)
-        st.session_state.answered = False
-        st.session_state.feedback = ""
-        st.session_state.explanation = ""
+        # フラグだけ立てて rerun、状態の初期化は rerun 後に行う
+        st.session_state.next_question = True
         st.experimental_rerun()
+
+# rerun後に次の問題をセット
+if st.session_state.get("next_question", False):
+    st.session_state.current_q = random.choice(questions)
+    st.session_state.answered = False
+    st.session_state.feedback = ""
+    st.session_state.explanation = ""
+    st.session_state.next_question = False
