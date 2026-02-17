@@ -115,7 +115,7 @@ if st.session_state.answered:
     if st.button("次へ"):
         # フラグだけ立てて rerun、状態の初期化は rerun 後に行う
         st.session_state.next_question = True
-        st.experimental_rerun()
+        st.rerun()
 
 # rerun後に次の問題をセット
 if st.session_state.get("next_question", False):
