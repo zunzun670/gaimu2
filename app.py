@@ -113,14 +113,9 @@ if st.session_state.answered:
     st.info(st.session_state.explanation)
 
     if st.button("次へ"):
-        # フラグだけ立てて rerun、状態の初期化は rerun 後に行う
-        st.session_state.next_question = True
+        # ここで次の問題をセットして rerun
+        st.session_state.current_q = random.choice(questions)
+        st.session_state.answered = False
+        st.session_state.feedback = ""
+        st.session_state.explanation = ""
         st.rerun()
-
-# rerun後に次の問題をセット
-if st.session_state.get("next_question", False):
-    st.session_state.current_q = random.choice(questions)
-    st.session_state.answered = False
-    st.session_state.feedback = ""
-    st.session_state.explanation = ""
-    st.session_state.next_question = False
