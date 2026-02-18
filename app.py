@@ -6,9 +6,12 @@ st.markdown("""
     <style> 
     .question-text, .stRadio label { 
     font-size: 18px !important; 
-    font-weight: 500 !important; 
-    line-height: 1.2 !important;  /* ← 行間を狭くする */
-}
+     line-height: 1.3 !important;
+    }
+    div[role="radiogroup"] > label {
+        line-height: 1.2 !important;
+        margin-bottom: 0.2rem !important;
+    }
     </style> 
 """, unsafe_allow_html=True)
 
