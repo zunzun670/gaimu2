@@ -165,7 +165,7 @@ if "current_q" not in st.session_state:
 
 q = st.session_state.current_q
 
-st.title("ニ種外務員と日本FP協会 3級ファイナンシャル・プランニング技能検定学科試験 2025年5月公表分クイズ")
+st.title("ニ種外務員とFP3級クイズ")
 
 # 3行分のスペースを空ける
 st.markdown("<br>", unsafe_allow_html=True)
