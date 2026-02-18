@@ -7,6 +7,7 @@ st.markdown("""
     .question-text, .stRadio label { 
     font-size: 18px !important; 
     font-weight: 500 !important; 
+    line-height: 1.2 !important;  /* ← 行間を狭くする */
 }
     </style> 
 """, unsafe_allow_html=True)
