@@ -24,6 +24,7 @@ questions = [
         "options": ["資産の保管", "運用の指図", "販売", "監査"],
         "answer": "運用の指図",
         "explanation": "運用会社は投資信託の資産をどのように運用するかを決める役割を担っているよ"
+        "source": "二種外務員",
     },
     {
         "question": "債券の利子は変動する？",
@@ -93,6 +94,8 @@ st.title("外務員ニ種クイズアプリ")
 # 3行分のスペースを空ける
 st.markdown("<br>", unsafe_allow_html=True)
 
+if "source" in current:
+    st.caption(current["source"])
 
 q = st.session_state.current_q 
 st.markdown(f"<div class='question-text'>{q['question']}</div>", unsafe_allow_html=True) 
