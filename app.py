@@ -11,9 +11,6 @@ st.markdown("""
     </style> 
 """, unsafe_allow_html=True)
 
-# 出典の表示（ここで q を使う！） 
-if "source" in q: st.caption(q["source"])
-
 # 問題データ
 questions = [
     {
