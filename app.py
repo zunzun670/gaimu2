@@ -169,7 +169,7 @@ if "current_q" not in st.session_state:
 
 q = st.session_state.current_q
 
-st.title("ニ種外務員とFP3級クイズ")
+st.title("ニ種外務員とFP3級 問題")
 
 # 3行分のスペースを空ける
 st.markdown("<br>", unsafe_allow_html=True)
