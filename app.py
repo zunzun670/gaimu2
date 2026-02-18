@@ -1,11 +1,5 @@
 import streamlit as st
 import random
-if "current_q" not in st.session_state:
-    st.session_state.current_q = random.choice(questions)
-    st.session_state.answered = False
-    st.session_state.feedback = ""
-    st.session_state.explanation = ""
-q = st.session_state.current_q
 
 # CSSでフォントサイズと太さを統一 
 st.markdown(""" 
@@ -108,18 +102,22 @@ if "current_q" not in st.session_state:
     st.session_state.feedback = "" 
     st.session_state.explanation = ""
 
+q = st.session_state.current_q
+
 st.title("ニ種外務員とFP3級クイズ")
 
 # 3行分のスペースを空ける
 st.markdown("<br>", unsafe_allow_html=True)
 
-if "source" in st.session_state.current_q:
-    st.caption(st.session_state.current_q["source"])
+# 出典の表示（小さくグレー） 
+if "source" in q: st.caption(q["source"])
 
+# 問題文と選択肢
 q = st.session_state.current_q 
 st.markdown(f"<div class='question-text'>{q['question']}</div>", unsafe_allow_html=True) 
 user_answer = st.radio("", q["options"], key=q["question"])
 
+# 答え合わせ
 if not st.session_state.answered:
     if st.button("答え合わせ"):
         st.session_state.answered = True
