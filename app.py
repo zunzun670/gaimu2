@@ -104,8 +104,8 @@ st.title("ニ種外務員とFP3級クイズ")
 # 3行分のスペースを空ける
 st.markdown("<br>", unsafe_allow_html=True)
 
-if "source" in current:
-    st.caption(current["source"])
+if "source" in st.session_state.current_q:
+    st.caption(st.session_state.current_q["source"])
 
 q = st.session_state.current_q 
 st.markdown(f"<div class='question-text'>{q['question']}</div>", unsafe_allow_html=True) 
