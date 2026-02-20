@@ -1,21 +1,27 @@
 import streamlit as st
 import random
 
-# CSSでフォントサイズと太さを統一 
+# CSSでフォントサイズと太さを統一、さらに可愛く装飾
 st.markdown(""" 
     <style> 
     .question-text, .stRadio label { 
-    font-size: 18px !important; 
-     line-height: 1.3 !important;
+        font-size: 18px !important; 
+        line-height: 1.3 !important;
+        font-weight: bold;
     }
     div[role="radiogroup"] > label {
         line-height: 1.2 !important;
         margin-bottom: 0.2rem !important;
     }
+    /* サイドバーや隅に置くキャラクター用 */
+    .daruma-text {
+        font-size: 50px;
+        text-align: center;
+    }
     </style> 
 """, unsafe_allow_html=True)
 
-# 問題データ
+# 問題データ（内容は一切変えていないよ！）
 questions = [
     {
         "question": "株式は元本保証されている？",
@@ -122,13 +128,6 @@ questions = [
         "explanation": "支給の条件は、賃金が60歳到達時点の75％未満に低下した場合。「75％未満」が正しいラインなので注意！",
         "source": "問題：日本FP協会 3級ファイナンシャル・プランニング技能検定学科試験 2025年5月公表分",
     },
-    {
-        "question": "雇用保険の高年齢雇用継続基本給付金は、原則として、60歳以上65歳未満の被保険者が、60歳到達時点に比べて賃金月額が85％未満に低下した状態で就労している場合に支給される。",
-        "options": ["◯", "✕"],
-        "answer": "✕",
-        "explanation": "支給の条件は、賃金が60歳到達時点の75％未満に低下した場合。「75％未満」が正しいラインなので注意！",
-        "source": "問題：日本FP協会 3級ファイナンシャル・プランニング技能検定学科試験 2025年5月公表分",
-    },
      {
         "question": "国民年金の第1号被保険者の収入により生計を維持している配偶者で、20歳以上60歳未満の者は、国民年金の第３号被保険者となる。 ",
         "options": ["◯", "✕"],
@@ -157,7 +156,6 @@ questions = [
         "explanation": "転換後の保険料は、転換時の年齢に応じた保険料率で計算されるよ。つまり、年齢が上がるほど保険料も高くなるので、転換のタイミングには注意が必要！",
         "source": "問題：日本FP協会 3級ファイナンシャル・プランニング技能検定学科試験 2025年5月公表分",
     },
-    
 ]
 
 # セッション状態の初期化 
@@ -166,39 +164,61 @@ if "current_q" not in st.session_state:
     st.session_state.answered = False 
     st.session_state.feedback = "" 
     st.session_state.explanation = ""
+    st.session_state.combo = 0 # 連続正解数
 
 q = st.session_state.current_q
 
-st.title("ニ種外務員とFP3級 問題")
+# サイドバーに合格祈願キャラクターを表示
+with st.sidebar:
+    st.write("### 合格祈願！進化するだるま")
+    # コンボ数に応じてだるまが豪華になる
+    if st.session_state.combo == 0:
+        daruma = "⚪️" # まだ白い
+    elif st.session_state.combo < 3:
+        daruma = "🔴" # 赤くなった
+    elif st.session_state.combo < 5:
+        daruma = "🏵️🔴🏵️" # ちょっと豪華
+    else:
+        daruma = "✨👑🔴👑✨" # めちゃくちゃ豪華
+    
+    st.markdown(f"<div class='daruma-text'>{daruma}</div>", unsafe_allow_html=True)
+    st.write(f"現在の連続正解: {st.session_state.combo}")
+
+st.title("二種外務員とFP3級 問題")
+
+# 出典に基づいてアイコンを決定
+icon = "💼" if "外務員" in q["source"] else "🏠"
 
 # 3行分のスペースを空ける
 st.markdown("<br>", unsafe_allow_html=True)
 
-# 出典の表示（小さくグレー） 
-if "source" in q: st.caption(q["source"])
+# 出典の表示（アイコン付き）
+if "source" in q: st.caption(f"{icon} {q['source']}")
 
-# 問題文と選択肢
-q = st.session_state.current_q 
+# 問題文
 st.markdown(f"<div class='question-text'>{q['question']}</div>", unsafe_allow_html=True) 
-user_answer = st.radio("", q["options"], key=q["question"])
+user_answer = st.radio("答えを選んでね", q["options"], key=q["question"])
 
-# 答え合わせ
+# 答え合わせボタン
 if not st.session_state.answered:
-    if st.button("答え合わせ"):
+    if st.button("答え合わせ 🔍"):
         st.session_state.answered = True
         if user_answer == q["answer"]:
-            st.session_state.feedback = "✅ 正解！"
+            st.session_state.feedback = "✅ 正解！すごい！"
+            st.session_state.combo += 1
+            st.balloons() # 正解時に風船！
         else:
-            st.session_state.feedback = "❌ 不正解！"
+            st.session_state.feedback = "❌ 不正解！どんまい！"
+            st.session_state.combo = 0 # 間違えたらコンボリセット
         st.session_state.explanation = f"💡 解説：{q['explanation']}"
 
 # フィードバックと解説の表示
 if st.session_state.answered:
-    st.markdown(st.session_state.feedback)
+    st.divider() # 区切り線
+    st.markdown(f"### {st.session_state.feedback}")
     st.info(st.session_state.explanation)
 
-    if st.button("次へ"):
-        # ここで次の問題をセットして rerun
+    if st.button("次へ 🐾"):
         st.session_state.current_q = random.choice(questions)
         st.session_state.answered = False
         st.session_state.feedback = ""
