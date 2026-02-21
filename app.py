@@ -254,6 +254,12 @@ if "source" in q:
     st.caption(f"{icon} {q['source']}")
 
 st.markdown(f"<div class='question-text'>{q['question']}</div>", unsafe_allow_html=True) 
+user_answer = st.radio(
+    "", 
+    q["options"], 
+    key=q["question"], 
+    label_visibility="collapsed"
+)
 
 # --- 6. 答え合わせロジック ---
 if not st.session_state.answered:
