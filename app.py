@@ -21,7 +21,7 @@ st.markdown("""
     </style> 
 """, unsafe_allow_html=True)
 
-# 問題データ（内容は一切変えていないよ！）
+# 問題データ
 questions = [
     {
         "question": "株式は元本保証されている？",
@@ -128,8 +128,8 @@ questions = [
         "explanation": "支給の条件は、賃金が60歳到達時点の75％未満に低下した場合。「75％未満」が正しいラインなので注意！",
         "source": "問題：日本FP協会 3級ファイナンシャル・プランニング技能検定学科試験 2025年5月公表分",
     },
-     {
-        "question": "国民年金の第1号被保険者の収入により生計を維持している配偶者で、20歳以上60歳未満の者は、国民年金の第3号被保険者となる。 ",
+    {
+        "question": "国民年金の第1号被保険者の収入により生計を維持している配偶者で、20歳以上60歳未満の者は、国民年金の第3号被保険者となる。",
         "options": ["◯", "✕"],
         "answer": "✕",
         "explanation": "第3号になれるのは、第2号（会社員や公務員）に扶養されている配偶者だけ。第1号（自営業など）に扶養されている配偶者は、自分で保険料を払う第1号被保険者になるよ。",
@@ -214,64 +214,64 @@ questions = [
     },
 ]
 
-# セッション状態の初期化 
+# --- 3. セッション状態の初期化（エラー回避のため一番上に！） ---
+if "total_correct" not in st.session_state:
+    st.session_state.total_correct = 0
+
 if "current_q" not in st.session_state: 
     st.session_state.current_q = random.choice(questions) 
     st.session_state.answered = False 
     st.session_state.feedback = "" 
     st.session_state.explanation = ""
-    st.session_state.total_correct = 0 # 「コンボ」から「通算正解数」に変更！
 
+# 現在の問題を短い変数名に
 q = st.session_state.current_q
 
-# サイドバーに合格祈願キャラクターを表示
+# --- 4. サイドバーの表示 ---
 with st.sidebar:
     st.write("### 合格祈願！進化するだるま")
-    # 正解数（total_correct）に応じてだるまが豪華になる
-    # ぴよの進み具合に合わせて、数字は好きに調整してね！
+    # 正解数（total_correct）に応じてだるまが進化
     if st.session_state.total_correct == 0:
-        daruma = "⚪️" # まだ真っ白
+        daruma = "⚪️"
     elif st.session_state.total_correct < 5:
-        daruma = "🔴" # 5問正解で赤くなる
+        daruma = "🔴"
     elif st.session_state.total_correct < 15:
-        daruma = "🏵️🔴🏵️" # 15問正解で飾りがつく
+        daruma = "🏵️🔴🏵️"
     else:
-        daruma = "✨👑🔴👑✨" # 15問以上で王様に！
+        daruma = "✨👑🔴👑✨"
     
     st.markdown(f"<div class='daruma-text'>{daruma}</div>", unsafe_allow_html=True)
     st.write(f"これまでの正解数: {st.session_state.total_correct} 問")
 
+# --- 5. メイン画面の表示 ---
 st.title("二種外務員とFP3級 問題")
 
 # 出典に基づいてアイコンを決定
 icon = "💼" if "外務員" in q["source"] else "🏠"
 
-# 3行分のスペースを空ける
 st.markdown("<br>", unsafe_allow_html=True)
+if "source" in q: 
+    st.caption(f"{icon} {q['source']}")
 
-# 出典の表示（アイコン付き）
-if "source" in q: st.caption(f"{icon} {q['source']}")
-
-# 問題文
 st.markdown(f"<div class='question-text'>{q['question']}</div>", unsafe_allow_html=True) 
 user_answer = st.radio("答えを選んでね", q["options"], key=q["question"])
 
-# 答え合わせボタン
+# --- 6. 答え合わせロジック ---
 if not st.session_state.answered:
     if st.button("答え合わせ 🔍"):
         st.session_state.answered = True
         if user_answer == q["answer"]:
             st.session_state.feedback = "✅ 正解！すごい！"
-            st.session_state.total_correct += 1 # 正解したらカウントアップ！
+            st.session_state.total_correct += 1 
             st.balloons()
         else:
             st.session_state.feedback = "❌ 不正解！どんまい！"
-            # ここでリセット（= 0）しないので、だるまはそのまま！
         st.session_state.explanation = f"💡 解説：{q['explanation']}"
-        
-# フィードバックと解説の表示
+        st.rerun() # 結果を即座に反映させるため
+
+# --- 7. フィードバックと解説 ---
 if st.session_state.answered:
-    st.divider() # 区切り線
+    st.divider() 
     st.markdown(f"### {st.session_state.feedback}")
     st.info(st.session_state.explanation)
 
